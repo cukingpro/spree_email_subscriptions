@@ -1,0 +1,9 @@
+<h1>Thank you</h1>
+
+<p>
+  Hello <%= @email_subscription.email %>, you have been successfully removed from this subscriber list. You will no longer hear from us.
+</p>
+
+<p>Did you unsubscribe by accident?
+<h3><%= link_to "Click here to re-subscribe", @subscribe_url%></h3>
+</p>

@@ -1,0 +1,11 @@
+<h1>Daily dishes</h1>
+	
+<p>
+  <% @products.each do |product| %>
+  <li><%= link_to product.name, DOMAIN+"/onthemenu/#{product.id}" %></li>
+  <%end%>
+</p>
+<p>
+<h3><%= link_to "Unsubscribe", @unsubscribe_url%></h3>
+</p>
+ 
