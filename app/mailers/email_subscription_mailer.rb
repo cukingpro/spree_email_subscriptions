@@ -10,7 +10,7 @@ class EmailSubscriptionMailer < ApplicationMailer
   def daily_email(email_subscription)
 
     @email_subscription = email_subscription
-    @products = Spree::Product.dishes_on_date(Date.today)
+    @products = Spree::Product.products_on_date(Date.today)
     set_unsubscribe_url(email_subscription)
 
     mail to: email_subscription.email, subject: "Daily dishes"
