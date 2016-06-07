@@ -19,16 +19,18 @@ module Spree
       # POST /email_subscriptions
       def create
         if Dish::EmailSubscription.exists?(email: params[:email], is_active: true)
-          @status = [ { "messages" => "Email subscription was already subscribed"}]
+          @status = [{ "messages" => "Email subscription was already subscribed" }]
+          render "spree/api/logger/log", status: 409
         else
           if @email_subscription = Dish::EmailSubscription.find_or_create_by(email: params[:email])
             EmailSubscriptionMailer.confirm_subscription_email(@email_subscription).deliver
-            @status = [ { "messages" => "Email subscription was successfully created"}]
+            @status = [{ "messages" => "Email subscription was successfully created" }]
           else
-            @status = [ { "messages" => "Email subscription was not successfully created"}]
+            @status = [{ "messages" => "Email subscription was not successfully created" }]
           end
+          render "spree/api/logger/log", status: 201
         end
-        render "spree/api/logger/log", status: 201
+        
       end
 
       def confirm_subscription
@@ -36,9 +38,9 @@ module Spree
 
         if @email_subscription.email_activate
           EmailSubscriptionMailer.thankyou_email(@email_subscription).deliver
-          @status = [ { "messages" => "Email subscription was successfully confirmed"}]
+          @status = [{ "messages" => "Email subscription was successfully confirmed" }]
         else
-          @status = [ { "messages" => "Email subscription was not successfully confirmed"}]
+          @status = [{ "messages" => "Email subscription was not successfully confirmed" }]
         end
         render "spree/api/logger/log", status: 200
       end
@@ -48,17 +50,12 @@ module Spree
 
         if @email_subscription.email_deactivate
           EmailSubscriptionMailer.unsubscribe_email(@email_subscription).deliver
-          @status = [ { "messages" => "Email subscription was successfully destroyed"}]
+          @status = [{ "messages" => "Email subscription was successfully destroyed" }]
         else
-          @status = [ { "messages" => "Email subscription was not successfully destroyed"}]
+          @status = [{ "messages" => "Email subscription was not successfully destroyed" }]
         end
         render "spree/api/logger/log", status: 200
       end
-
-      # Only allow a trusted parameter "white list" through.
-      # def email_subscription_params
-      #   params.require(:email_subscription).permit(:email, :is_active)
-      # end
 
       private
 
